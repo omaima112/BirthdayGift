@@ -134,7 +134,7 @@ const photocardMessages = {
 
 function App() {
   const [currentPage, setCurrentPage] = useState<string>('home');
-  const [audioUrl, setAudioUrl] = useState<string | null>('/audio/WhatsApp%20Video%202025-11-22%20at%2011.29.49%20PM%20(online-audio-converter.com).mp3');
+  const [audioUrl, setAudioUrl] = useState<string | null>('/audio/birthday.mp3');
   const [isTransitioning, setIsTransitioning] = useState(false);
 
   // no seeded badges — badges must be earned by completing celeb quizzes
