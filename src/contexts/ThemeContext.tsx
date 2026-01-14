@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 export type ThemeType = 'golden' | 'pink' | 'purple';
 
@@ -52,6 +52,15 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const setTheme = (type: ThemeType) => {
     setThemeType(type);
   };
+
+  useEffect(() => {
+    const theme = themes[themeType];
+    const root = document.documentElement;
+    root.style.setProperty('--theme-gradient', theme.gradient);
+    root.style.setProperty('--theme-accent', theme.accentColor);
+    root.style.setProperty('--theme-text', theme.textColor);
+    root.style.setProperty('--theme-button-hover', theme.buttonHover);
+  }, [themeType]);
 
   return (
     <ThemeContext.Provider

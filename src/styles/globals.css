@@ -1,349 +1,98 @@
-import React, { useState, useEffect } from 'react';
-import { ThemeProvider } from './contexts/ThemeContext';
-import { HomePage } from './components/HomePage';
-import { CelebPage } from './components/CelebPage';
-import { ThemeToggle } from './components/ThemeToggle';
-import { HamburgerMenu } from './components/HamburgerMenu';
-import { QuizQuestion } from './components/Quiz';
-import InteractiveCursor from './components/InteractiveCursor';
-import CelebMatchGame from './components/CelebMatchGame';
-// Playlist page removed — audio stays as sticky player
-import SurprisePage from './components/SurprisePage';
-import AudioPlayer from './components/ui/audio-player';
-import './styles/globals.css';58 264.53);
+:root {
+  --font-size: 16px;
+  --background: #f6e7c8;
+  --foreground: #373854;
+  --card: #ffffff;
+  --card-foreground: #373854;
+  --popover: #ffffff;
+  --popover-foreground: #373854;
+  --primary: #030213;
+  --primary-foreground: #ffffff;
+  --secondary: #f8bf33;
   --secondary-foreground: #030213;
-// Quiz data for each celeb
-const billieQuiz: QuizQuestion[] = [
-  {-accent: #e9ebef;
-    question: "What year was Billie Eilish born?",
-    options: ["2000", "2001", "2002", "2003"],
-    correctAnswer: 1,round: #ffffff;
-  },border: rgba(0, 0, 0, 0.1);
-  {-input: transparent;
-    question: "Which song made Billie Eilish famous?",
-    options: ["bad guy", "ocean eyes", "bury a friend", "everything i wanted"],
-    correctAnswer: 1,m: 500;
-  },font-weight-normal: 400;
-  {-ring: oklch(0.708 0 0);
-    question: "What is Billie's signature style?",
-    options: ["Bright colors", "Oversized clothing", "Formal wear", "Athletic wear"],
-    correctAnswer: 1,398 0.07 227.392);
-  },chart-4: oklch(0.828 0.189 84.429);
-  {-chart-5: oklch(0.769 0.188 70.08);
-    question: "Who does Billie frequently collaborate with?",
-    options: ["Her brother FINNEAS", "Her sister", "Her mom", "Her dad"],
-    correctAnswer: 0,d: oklch(0.145 0 0);
-  },sidebar-primary: #030213;
-  {-sidebar-primary-foreground: oklch(0.985 0 0);
-    question: "What color is Billie most associated with?",
-    options: ["Pink", "Green and black", "Red", "Blue"],
-    correctAnswer: 1,klch(0.922 0 0);
-  },sidebar-ring: oklch(0.708 0 0);
-];
-  /* Custom fonts */
-const jakeQuiz: QuizQuestion[] = [y', serif;
-  {-font-body: 'Montserrat', sans-serif;
-    question: "Which K-pop group is Jake from?",
-    options: ["BTS", "ENHYPEN", "TXT", "SEVENTEEN"],
-    correctAnswer: 1,
-  },background: oklch(0.145 0 0);
-  {-foreground: oklch(0.985 0 0);
-    question: "What is Jake's nationality?",
-    options: ["Korean", "Australian", "American", "British"],
-    correctAnswer: 1,145 0 0);
-  },popover-foreground: oklch(0.985 0 0);
-  {-primary: oklch(0.985 0 0);
-    question: "What is Jake known for in ENHYPEN?",
-    options: ["Rapping", "Dancing", "Singing and visuals", "Producing"],
-    correctAnswer: 2,und: oklch(0.985 0 0);
-  },muted: oklch(0.269 0 0);
-  {-muted-foreground: oklch(0.708 0 0);
-    question: "What year did ENHYPEN debut?",
-    options: ["2019", "2020", "2021", "2022"],
-    correctAnswer: 1,h(0.396 0.141 25.723);
-  },destructive-foreground: oklch(0.637 0.237 25.331);
-  {-border: oklch(0.269 0 0);
-    question: "What is Jake's representative emoji?",
-    options: ["🐶", "🐱", "🐰", "🐻"],
-    correctAnswer: 0,m: 500;
-  },font-weight-normal: 400;
-];--chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-const jennieQuiz: QuizQuestion[] = [);
-  {-chart-4: oklch(0.627 0.265 303.9);
-    question: "Which group is Jennie from?",
-    options: ["TWICE", "RED VELVET", "BLACKPINK", "ITZY"],
-    correctAnswer: 2,d: oklch(0.985 0 0);
-  },sidebar-primary: oklch(0.488 0.243 264.376);
-  {-sidebar-primary-foreground: oklch(0.985 0 0);
-    question: "What is Jennie's position in BLACKPINK?",
-    options: ["Main vocalist", "Main rapper", "Main dancer", "Leader"],
-    correctAnswer: 1,klch(0.269 0 0);
-  },sidebar-ring: oklch(0.439 0 0);
-  {
-    question: "Where was Jennie born?",
-    options: ["Seoul, Korea", "Anyang, Korea", "Busan, Korea", "Incheon, Korea"],
-    correctAnswer: 1, var(--background);
-  },color-foreground: var(--foreground);
-  {-color-card: var(--card);
-    question: "What is Jennie's solo debut song?",
-    options: ["SOLO", "ON THE GROUND", "Gone", "Money"],
-    correctAnswer: 0,eground: var(--popover-foreground);
-  },color-primary: var(--primary);
-  {-color-primary-foreground: var(--primary-foreground);
-    question: "What nickname is Jennie known by?",
-    options: ["Human Gucci", "Human Chanel", "Human Dior", "Human Prada"],
-    correctAnswer: 1,--muted);
-  },color-muted-foreground: var(--muted-foreground);
-];--color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-const beomgyuQuiz: QuizQuestion[] = [ive);
-  {-color-destructive-foreground: var(--destructive-foreground);
-    question: "Which group is Beomgyu from?",
-    options: ["BTS", "TXT", "ENHYPEN", "ATEEZ"],
-    correctAnswer: 1,round: var(--input-background);
-  },color-switch-background: var(--switch-background);
-  {-color-ring: var(--ring);
-    question: "What is Beomgyu's role in TXT?",
-    options: ["Leader", "Main dancer", "Vocalist and visual", "Main rapper"],
-    correctAnswer: 2,r(--chart-3);
-  },color-chart-4: var(--chart-4);
-  {-color-chart-5: var(--chart-5);
-    question: "What year did TXT debut?",
-    options: ["2018", "2019", "2020", "2021"],
-    correctAnswer: 1,radius);
-  },radius-xl: calc(var(--radius) + 4px);
-  {-color-sidebar: var(--sidebar);
-    question: "What is Beomgyu known for?",-foreground);
-    options: ["Being the oldest", "His humor and charm", "Producing", "Choreography"],
-    correctAnswer: 1,mary-foreground: var(--sidebar-primary-foreground);
-  },color-sidebar-accent: var(--sidebar-accent);
-  {-color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-    question: "What instrument can Beomgyu play?",
-    options: ["Piano", "Drums", "Guitar", "Violin"],
-    correctAnswer: 2,
-  },
-];ayer base {
-  * {
-// Photocard messagesder outline-ring/50;
-const photocardMessages = {
-  billie: "Billie's voice is as unique as you are, Samal! Keep being authentically you 💚",
-  jake: "Jake's smile is as bright as yours! May your day be filled with sunshine ☀️",
-  jennie: "Jennie's confidence and style remind us of you! Stay fierce and fabulous 👑",
-  beomgyu: "Beomgyu's charm and humor light up every room, just like you do! ✨",
-};  transition: background 0.3s;
-  }
-function App() {
-  const [currentPage, setCurrentPage] = useState<string>('home');
-  const [audioUrl, setAudioUrl] = useState<string | null>('/audio/birthday.mp3');
-  const [isTransitioning, setIsTransitioning] = useState(false);n ancestor with a Tailwind text class.
-  const [portfolioMode, setPortfolioMode] = useState(false);
+  --muted: #ececf0;
+  --muted-foreground: #717182;
+  --accent: #e9ebef;
+  --accent-foreground: #030213;
+  --destructive: #d4183d;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f3f3f5;
+  --switch-background: #cbced4;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #b3b3b3;
+  --radius: 0.625rem;
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+  --theme-gradient: linear-gradient(135deg, #e99c05 0%, #f4ae00 25%, #f8bf33 50%, #f8ce19 75%, #ffdc02 100%);
+  --theme-accent: #ffdc02;
+  --theme-text: #373854;
+  --theme-button-hover: rgba(255, 220, 2, 0.3);
+}
+
+body, html, #root {
+  min-height: 100vh;
+  width: 100vw;
+  background: var(--theme-gradient);
+  color: var(--theme-text);
+  transition: background 0.3s;
+}
+
 @layer base {
-  // no seeded badges — badges must be earned by completing celeb quizzes
-    h1 {
-  const handleNavigate = (page: string) => {
-    setIsTransitioning(true);-weight-medium);
-    setTimeout(() => {;
-      setCurrentPage(page);nt-heading);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      setIsTransitioning(false);
-    }, 240);
-  };  font-size: var(--text-xl);
-      font-weight: var(--font-weight-medium);
-  const setPersistentAudio = (url: string) => {
-    setAudioUrl(url);r(--font-heading);
-  };}
-
-  // Konami code to unlock surprise page
-  React.useEffect(() => {xt-lg);
-    const code = [38,38,40,40,37,39,37,39,66,65];
-    let idx = 0;t: 1.5;
-    const onKey = (e: KeyboardEvent) => {
-      if ((e as any).keyCode === code[idx]) {
-        idx++;
-        if (idx === code.length) {
-          handleNavigate('surprise');
-          idx = 0; var(--font-weight-medium);
-        }e-height: 1.5;
-      } else {ily: var(--font-heading);
-        idx = 0;
-      }
-    };{
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);e-height: 1.5;
-    }
-  const neutralMessage = "Happy Birthday! Wishing you a wonderful year ahead.";
-  const renderPage = () => {
-    switch (currentPage) {t-base);
-      case 'billie':ar(--font-weight-medium);
-        return (t: 1.5;
-          <CelebPage
-            celebName="Billie Eilish"
-            celebImage="/images/billie1.png"
-            celebImages={["/images/billie1.png", "/images/billie2.png","/images/billie3.png","/images/billie4.png"]}
-            photocardImage="/images/billie2.png"
-            photocardMessage={portfolioMode ? neutralMessage : photocardMessages.billie}
-            quizQuestions={billieQuiz}
-            onBack={() => handleNavigate('home')}
-          />
-        );-size: var(--text-base);
-      case 'jake': var(--font-weight-normal);
-        return (t: 1.5;
-          <CelebPage
-            celebName="Sim Jake"
-            celebImage="/images/jake1.png"
-            celebImages={["/images/jake1.png","/images/jake2.png","/images/jake3.png","/images/jake4.png","/images/jake5.png","/images/jake6.png","/images/jake7.png"]}
-            photocardImage="/images/jake3.png"
-            photocardMessage={portfolioMode ? neutralMessage : photocardMessages.jake}
-            quizQuestions={jakeQuiz}
-            onBack={() => handleNavigate('home')}
-          />imations */
-        ); sparkle {
-      case 'jennie':
-        return (
-          <CelebPage(0);
-            celebName="Kim Jennie"
-            celebImage="/images/jennie1.png"
-            celebImages={["/images/jennie1.png","/images/jennie2.png","/images/jennie3.png","/images/jennie4.png"]}
-            photocardImage="/images/jennie2.png"
-            photocardMessage={portfolioMode ? neutralMessage : photocardMessages.jennie}
-            quizQuestions={jennieQuiz}
-            onBack={() => handleNavigate('home')}
-          />loat {
-        ); {
-      case 'beomgyu':ateY(0px);
-        return (
-          <CelebPage
-            celebName="Beomgyu");
-            celebImage="/images/BeomgyuTXT.png"
-            celebImages={["/images/beomgyu1.png","/images/beomgyu2.png","/images/beomgyu4.png","/images/BeomgyuTXT.png"]}
-            photocardImage="/images/beomgyu2.png"
-            photocardMessage={portfolioMode ? neutralMessage : photocardMessages.beomgyu}
-            quizQuestions={beomgyuQuiz}
-            onBack={() => handleNavigate('home')}
-          />
-        );
-      case 'match':tion: 100% 50%;
-        return (
-          <div className="min-h-screen px-4 py-20">
-            <div className="max-w-4xl mx-auto">
-              <CelebMatchGame onMatch={(p) => handleNavigate(p)} onBack={() => handleNavigate('home')} />
-            </div>le 2s ease-in-out infinite;
-          </div>
-        );
-      // Playlist page removed — users control playback using the sticky player
-      case 'surprise':ease-in-out infinite;
-        return <SurprisePage onBack={() => handleNavigate('home')} />;
-      default:
-        return <HomePage onNavigate={handleNavigate} />;
-    }kground-size: 200% 200%;
-  };imation: gradient-shift 8s ease infinite;
-}
-  return (
-    <ThemeProvider>utility */
-      <div
-        className={`relative transition-all duration-300 ${isTransitioning ? 'opacity-0 translate-y-2' : 'opacity-100'} ${audioUrl ? 'with-audio' : ''}`}
-        style={{
-          minHeight: '100vh',
-          background: 'linear-gradient(135deg, var(--background) 60%, var(--secondary) 100%)',{
-        }}
-      >
-        <InteractiveCursor />  transform: translateX(-50%);
-        <div style={{ position: 'fixed', top: 32, right: 32, zIndex: 50 }}>
-          <HamburgerMenu portfolioMode={portfolioMode} setPortfolioMode={setPortfolioMode} />
-        </div>
-        {/* Remove floating ThemeToggle, now inside HamburgerMenu */}
-        {renderPage()}
-icky audio is present, ensure page content has room at the bottom */
-        {/* Persistent audio player (sticky) */}{
-        {audioUrl && (0px; /* room for the player on mobile and desktop */
-          <div className="audio-sticky" aria-hidden={false}>
-            <AudioPlayer defaultUrl={audioUrl} />
-          </div>/* small transform used while hiding */
-        )}
-      </div>  transform: translateY(8px);
-
-
-
-
-
-
-export default App;}  );    </ThemeProvider>}
-
-/* Make interactive accents use the primary color so hover/active states
-   remain clear across light and dark themes. */
-:root {
-  --accent: var(--primary);
-  --accent-foreground: var(--primary-foreground);
-}
-
-.dark {
-  --accent: var(--primary);
-  --accent-foreground: var(--primary-foreground);
-}
-
-/* Ensure links and buttons show the accent color on hover/focus */
-a, a:visited {
-  color: var(--foreground);
-}
-
-a:hover, a:focus, button:hover, button:focus, [role="button"]:hover, [role="button"]:focus {
-  color: var(--accent);
-}
-
-/* Improve touch targets on small screens */
-@media (max-width: 640px) {
-  button {
-    padding: 12px 16px;
-    min-height: 44px;
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: var(--font-body);
+    color: var(--foreground);
+    background: none;
   }
 }
 
-/* Make modals scrollable and contained on small screens */
-.ancient-letter-dialog {
-  max-height: 85vh;
-  overflow-y: auto;
+html {
+  font-size: var(--font-size);
 }
 
-/* Make popovers use the card color so foreground contrasts with card foreground */
-:root {
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
+/* Custom animations */
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0);}
+  50% { opacity: 1; transform: scale(1);}
 }
+@keyframes float {
+  0%, 100% { transform: translateY(0px);}
+  50% { transform: translateY(-20px);}
+}
+@keyframes gradient-shift {
+  0%, 100% { background-position: 0% 50%;}
+  50% { background-position: 100% 50%;}
+}
+.animate-sparkle { animation: sparkle 2s ease-in-out infinite;}
+.animate-float { animation: float 3s ease-in-out infinite;}
+.animate-gradient { background-size: 200% 200%; animation: gradient-shift 8s ease infinite;}
 
-.dark {
-  --popover: var(--card);
-  --popover-foreground: var(--card-foreground);
-}
+/* Page transition utility */
+.transition-all { transition: all 240ms ease; }
 
-.hamburger-menu {
-  /* ...existing styles... */
-  min-width: 48px;
-  min-height: 48px;
-  font-size: 24px;
+.audio-sticky {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 18px;
+  z-index: 60;
+  width: min(720px, calc(100% - 32px));
 }
+.with-audio { padding-bottom: 120px; }
+.translate-y-2 { transform: translateY(8px); }
 
-button, [role="button"] {
-  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
-  border-radius: var(--radius-lg);
-}
-button:hover, [role="button"]:hover {
-  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
-  background: var(--accent);
-  color: var(--accent-foreground);
-}
-
-/* Add to globals.css */
+/* Premium image and glass styles */
 .premium-img {
   border-radius: 1.5rem;
   box-shadow: 0 8px 32px rgba(0,0,0,0.18);
   transition: transform 0.2s;
 }
-.premium-img:hover {
-  transform: scale(1.03) rotate(-1deg);
-}
-
+.premium-img:hover { transform: scale(1.03) rotate(-1deg); }
 .glass {
   background: rgba(255,255,255,0.18);
   backdrop-filter: blur(8px);
@@ -351,6 +100,7 @@ button:hover, [role="button"]:hover {
   border: 1px solid rgba(255,255,255,0.24);
 }
 
+/* Private warning */
 .private-warning {
   background: rgba(255, 230, 230, 0.95);
   color: #b91c1c;
@@ -362,4 +112,28 @@ button:hover, [role="button"]:hover {
   text-align: center;
   border: 2px solid #fca5a5;
   box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* Hamburger menu */
+.hamburger-menu {
+  min-width: 48px;
+  min-height: 48px;
+  font-size: 24px;
+}
+
+/* Button hover */
+button, [role="button"] {
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+  border-radius: var(--radius);
+}
+button:hover, [role="button"]:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.10);
+  background: var(--accent);
+  color: var(--accent-foreground);
+}
+
+/* Modal dialog */
+.ancient-letter-dialog {
+  max-height: 85vh;
+  overflow-y: auto;
 }
